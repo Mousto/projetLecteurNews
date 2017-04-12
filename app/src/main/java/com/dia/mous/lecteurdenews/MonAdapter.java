@@ -8,18 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import java.util.ArrayList;
 
 public class MonAdapter extends RecyclerView.Adapter<MonAdapter.MonViewHolder> implements XMLAsyncTask.DocumentConsumer {
 
-    private Document _document = null;
+    private ArrayList<Element> _element = null;
     public static String monUrl = "monHtmlContent";
 
     @Override
     public int getItemCount() {
-        if(_document != null){
-            return _document.getElementsByTagName("item").getLength();
+        if(_element != null){
+            return _element.size();
         }
         else {
             return 0;
@@ -35,14 +36,16 @@ public class MonAdapter extends RecyclerView.Adapter<MonAdapter.MonViewHolder> i
 
     @Override
     public void onBindViewHolder(MonViewHolder holder, int position) {
-        Element item = (Element) _document.getElementsByTagName("item").item(position);
-        holder.setElement(item);
+
+            Element item = (Element) _element.get(position);
+            holder.setElement(item);
+
     }
 
     @Override
-    public void setXMLDocument(Document document)
+    public void setXMLDocument(ArrayList<Element> document)
     {
-        _document = document;
+        _element = document;
         notifyDataSetChanged();
     }
 
