@@ -40,7 +40,7 @@ public class XMLAsyncTask extends AsyncTask<String, Void, ArrayList<Element>> {
         nodeListArrayList = new ArrayList<>();
         Document document = null;
         try {
-            Thread.sleep(0);
+            Thread.sleep(2000);
             for(String u : params) {
                 URL url = new URL(u);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -62,9 +62,9 @@ public class XMLAsyncTask extends AsyncTask<String, Void, ArrayList<Element>> {
                 }
             }
         }
-        catch (InterruptedException ex)//par intérruption entre autre de XMLAsinctask (appel de _task.cancel(true) dans onDestroy de MainAcrivity)
+        catch (InterruptedException ex)//par intérruption entre autre de XMLAsynktask (appel de _task.cancel(true) dans onDestroy de Activité concernée)
         {
-           // Log.i("XMLAsinctask","Téléchargement intérrompu");
+            Log.i("XMLAsinctask","Téléchargement intérrompu");
             return null;
         }
         catch (Exception ex) {
