@@ -16,6 +16,14 @@ public class TitreNewsActivity extends AppCompatActivity {
         setContentView(R.layout.list_recycler);
 
         final RecyclerView rv = (RecyclerView)findViewById(R.id.list);
+        rv.addItemDecoration(new SimpleDividerItemDecoration(this));
+
+        DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                mLayoutManager.getOrientation());
+        recyclerView.addItemDecoration(mDividerItemDecoration);
+
+
+
         rv.setLayoutManager(new LinearLayoutManager(this));
         MonAdapter adapter = new MonAdapter();
         rv.setAdapter(adapter);
