@@ -5,11 +5,13 @@ import android.util.Log;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,7 +20,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
  * Created by Mous on 06/03/2017.
  */
 
-public class XMLAsyncTask extends AsyncTask<String, Void, ArrayList<Element>> {
+public class monAsyncTask extends AsyncTask<String, Void, ArrayList<Element>> {
 
     interface DocumentConsumer{
         void setXMLDocument(ArrayList<Element> elementArrayList);
@@ -27,8 +29,9 @@ public class XMLAsyncTask extends AsyncTask<String, Void, ArrayList<Element>> {
     private DocumentConsumer _consumer;
     private ArrayList<NodeList> nodeListArrayList;//Permet de récupérer les "ensembles" d'éléments provenant des trois flux rss.
     private ArrayList<Element> elementArrayList;//permet de récupérer une liste d'éléments provenant des ensembles précédents.
+    String date;
 
-    public XMLAsyncTask(DocumentConsumer consumer ){
+    public monAsyncTask(DocumentConsumer consumer ){
         _consumer = consumer;
     }
 
@@ -38,6 +41,7 @@ public class XMLAsyncTask extends AsyncTask<String, Void, ArrayList<Element>> {
         ArrayList<Document> arrayList = new ArrayList<>();
         elementArrayList = new ArrayList<>();
         nodeListArrayList = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");//Format de la date
         Document document = null;
         try {
             Thread.sleep(2000);
@@ -58,6 +62,7 @@ public class XMLAsyncTask extends AsyncTask<String, Void, ArrayList<Element>> {
             for(NodeList nodeList : nodeListArrayList){
                 for(int i=0; i<nodeList.getLength(); i++){
                     Element element = (Element)nodeList.item(i);
+                    date = element.getFirstChild().getTextContent();
                     elementArrayList.add(element);
                 }
             }
@@ -77,6 +82,7 @@ public class XMLAsyncTask extends AsyncTask<String, Void, ArrayList<Element>> {
     @Override
     protected void onPostExecute(ArrayList<Element> resultat)
     {
+        Log.i("XMLAsinctask date : ", date);
         _consumer.setXMLDocument(resultat);
     }
 }

@@ -12,9 +12,9 @@ import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 
-public class MonAdapter extends RecyclerView.Adapter<MonAdapter.MonViewHolder> implements XMLAsyncTask.DocumentConsumer {
+public class MonAdapter extends RecyclerView.Adapter<MonAdapter.MonViewHolder> implements monAsyncTask.DocumentConsumer {
 
-    private ArrayList<Element> _element = null;
+    public ArrayList<Element> _element = null;
     public static String monUrl = "monHtmlContent";
 
     @Override
@@ -48,6 +48,14 @@ public class MonAdapter extends RecyclerView.Adapter<MonAdapter.MonViewHolder> i
         _element = document;
         notifyDataSetChanged();
     }
+
+    public void clear() {
+        int size = _element.size();
+        _element.clear();
+        notifyItemRangeRemoved(0, size);
+    }
+
+
 
     public class MonViewHolder extends RecyclerView.ViewHolder {
 
