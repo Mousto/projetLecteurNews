@@ -11,42 +11,29 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+
+import com.dia.mous.lecteurdenews.Fragment.TitreNewsActivityFragment;
+
+import static com.dia.mous.lecteurdenews.Fragment.TitreNewsActivityFragment.adapter;
+import static com.dia.mous.lecteurdenews.Fragment.TitreNewsActivityFragment.laTache;
+
 public class TitreNewsActivity extends AppCompatActivity {
 
-    private monAsyncTask laTache = null;
-    private MonAdapter adapter;
-    private ProgressBar maProgressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_recycler);
 
-        final RecyclerView rv = (RecyclerView)findViewById(R.id.list);
-        rv.addItemDecoration(new SimpleDividerItemDecoration(this));
-        rv.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MonAdapter();
-        rv.setAdapter(adapter);
-
-        laTache = new monAsyncTask(adapter);
-        laTache.execute("http://www.lemonde.fr/rss/une.xml","http://www.lemonde.fr/afrique/rss_full.xml","http://www.lemonde.fr/ameriques/rss_full.xml");
-
-        maProgressBar = (ProgressBar) findViewById(R.id.progress);
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                maProgressBar.setVisibility(View.GONE);
-            }
-        });
     }
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
 
-        if(laTache != null){
+        /*if(TitreNewsActivityFragment.laTache == null){
             laTache.cancel(true);//Arrêt du téléchargement quand on quite l'activité(le thread de l'asynktask sera interrompu)
                                     //on peut donc le catcher dans InterruptedException de l'asynktask
-        }
+        }*/
     }
 
     @Override
