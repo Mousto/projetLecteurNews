@@ -14,8 +14,18 @@ import java.util.ArrayList;
 
 public class MonAdapter extends RecyclerView.Adapter<MonAdapter.MonViewHolder> implements monAsyncTask.DocumentConsumer {
 
+    public interface URLLoader{
+        void load(String titre, String link);
+    }
+
+    private final URLLoader urlLoader;
     public ArrayList<Element> _element = null;
     public static String monUrl = "monHtmlContent";
+    public static String monTitre = "monTitre";
+
+    public MonAdapter(URLLoader PurlLoader){
+        urlLoader = PurlLoader;
+    }
 
     @Override
     public int getItemCount() {
@@ -59,23 +69,20 @@ public class MonAdapter extends RecyclerView.Adapter<MonAdapter.MonViewHolder> i
 
     public class MonViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView _titre;
+        private final TextView titre;
         private Element _currentElement;
-        private String _link;
 
         public MonViewHolder(final View itemView) {
             super(itemView);
 
-            _titre = ((TextView)itemView.findViewById(R.id.titre));
+            titre = ((TextView)itemView.findViewById(R.id.titre));
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                Context context = view.getContext();
-                Intent i = new Intent(view.getContext(), WebViewActivity.class);
-                _link = _currentElement.getElementsByTagName("link").item(0).getTextContent();
-                i.putExtra(monUrl, _link);
-                context.startActivity(i);
+                String link = _currentElement.getElementsByTagName("link").item(0).getTextContent();
+                String titreArticle = _currentElement.getElementsByTagName("title").item(0).getTextContent();
+                urlLoader.load(titreArticle, link);
                 }
             });
         }
@@ -83,7 +90,7 @@ public class MonAdapter extends RecyclerView.Adapter<MonAdapter.MonViewHolder> i
         public void setElement(Element element)
         {
             _currentElement = element;
-            _titre.setText(element.getElementsByTagName("title").item(0).getTextContent());
+            titre.setText(element.getElementsByTagName("title").item(0).getTextContent());
         }
     }
 

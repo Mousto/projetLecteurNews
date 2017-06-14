@@ -4,22 +4,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.dia.mous.lecteurdenews.MonAdapter;
 import com.dia.mous.lecteurdenews.R;
 import com.dia.mous.lecteurdenews.SimpleDividerItemDecoration;
 import com.dia.mous.lecteurdenews.monAsyncTask;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Mous on 19/04/2017.
@@ -34,9 +27,9 @@ public class TitreNewsActivityFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.main_activity_fragment, container, false);
+        View view = inflater.inflate(R.layout.titre__fragment, container, false);
         //Instancier vos composants graphique ici (faîtes vos findViewById)
-        rv = (RecyclerView) view.findViewById(R.id.id_recyclerview);
+        rv = (RecyclerView) view.findViewById(R.id.listFragment);
         maProgressBar = (ProgressBar) view.findViewById(R.id.progress);
 
         return view;
@@ -48,7 +41,7 @@ public class TitreNewsActivityFragment extends Fragment {
 
         rv.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new MonAdapter();
+        adapter = new MonAdapter((MonAdapter.URLLoader) getActivity());
         rv.setAdapter(adapter);
 
         laTache = new monAsyncTask(adapter);
@@ -68,37 +61,11 @@ public class TitreNewsActivityFragment extends Fragment {
         super.onDestroyView();
 
         if (laTache != null) {
-            laTache = null;
+            //laTache = null;
             laTache.cancel(true);//Arrêt du téléchargement quand on quite l'activité(le thread de l'asynktask sera interrompu)
             //on peut donc le catcher dans InterruptedException de l'asynktask
+            //Toast.makeText(getActivity(),"onDestroy de fragment",Toast.LENGTH_LONG).show();
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        Log.d(TAG, "Fragment.onCreateOptionsMenu");
-
-        inflater.inflate(R.menu.menu_action_bar, menu);
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        Log.d(TAG, "Fragment.onOptionsItemSelected");
-
-        switch (item.getItemId()) {
-            case R.id.action_refresh:
-                Toast.makeText(getActivity(),
-                        "It worked ",
-                        Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-
-    }
 }
